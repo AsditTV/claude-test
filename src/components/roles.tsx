@@ -72,13 +72,13 @@ export const WINNER_META: Record<Winner, { title: string; subtitle: string; grad
   mrwhite: {
     title: 'Victoire de Mr White',
     subtitle: 'Sans aucun mot, il a berné tout le monde !',
-    gradient: 'from-white via-slate-300 to-slate-500',
+    gradient: 'from-slate-400 via-slate-600 to-indigo-900',
     emoji: '👻',
   },
   imposteurs: {
     title: 'Victoire des Imposteurs',
     subtitle: 'Undercover et Mr White triomphent ensemble.',
-    gradient: 'from-rose-400 via-violet-500 to-slate-300',
+    gradient: 'from-rose-500 via-violet-600 to-slate-700',
     emoji: '🕶️',
   },
 };

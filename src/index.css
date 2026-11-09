@@ -108,6 +108,28 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Fond et police VERROUILLÉS, hors @layer.
+   La page d'hébergement (claude.ai) pose ses propres styles sur
+   <body> (fond clair en mode clair, police système 14 px). Des règles
+   non « layered » passent toujours devant celles de Tailwind :
+   sans ce bloc, le fond devenait blanc et les textes blancs
+   disparaissaient en mode clair.
+   ───────────────────────────────────────────────────────────── */
+:root,
+html {
+  color-scheme: dark !important;
+  background-color: #05050f !important;
+}
+html body {
+  background: transparent !important; /* laisse voir le dégradé de <Background> */
+  color: #e2e8f0 !important;
+  font-family: var(--font-sans) !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
    Couleurs de secours HORS @layer, en rgba() simple.
    Certains Safari/WebViews d'iPhone gèrent mal les couleurs
    translucides de Tailwind 4 (color-mix, @layer) : sans ces règles,
