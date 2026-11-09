@@ -55,7 +55,7 @@ export function SetupPage() {
       const names = prev.playerNames.slice(0, count);
       while (names.length < count) names.push('');
       const comp =
-        validateComposition(count, prev.undercoverCount, prev.mrWhiteCount) === null && prev.mode !== 'chaos'
+        validateComposition(count, prev.undercoverCount, prev.mrWhiteCount) === null
           ? { undercover: prev.undercoverCount, mrWhite: prev.mrWhiteCount }
           : compositionForMode(prev.mode, count);
       return { ...prev, playerNames: names, undercoverCount: comp.undercover, mrWhiteCount: comp.mrWhite };
@@ -273,7 +273,7 @@ export function SetupPage() {
               size="md"
               icon={<Wand2 size={16} />}
               onClick={() => {
-                const c = s.mode === 'chaos' ? compositionForMode('chaos', n) : recommendComposition(n, !noMrWhite);
+                const c = recommendComposition(n, !noMrWhite);
                 update({ undercoverCount: c.undercover, mrWhiteCount: c.mrWhite });
               }}
             >

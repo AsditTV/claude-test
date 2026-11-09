@@ -1,5 +1,5 @@
 import type { GameMode, GameOptions, GameSettings } from '../types';
-import { maxImpostors, recommendComposition, validateComposition, MIN_PLAYERS, MAX_PLAYERS } from './game';
+import { recommendComposition, validateComposition, MIN_PLAYERS, MAX_PLAYERS } from './game';
 import { KEYS, readJSON, writeJSON } from './storage';
 import { CUSTOM_CATEGORY_ID } from '../data/words';
 
@@ -16,7 +16,6 @@ export const MODES: { id: GameMode; label: string; emoji: string; desc: string }
   { id: 'classique', label: 'Classique', emoji: '🕵️', desc: 'Les règles originales' },
   { id: 'rapide', label: 'Rapide', emoji: '⚡', desc: 'Chrono 20 s, sans règles' },
   { id: 'sans-mrwhite', label: 'Sans Mr White', emoji: '🚫', desc: 'Civils contre Undercover' },
-  { id: 'chaos', label: 'Chaos', emoji: '🌀', desc: 'Plusieurs Undercover + Mr White' },
   { id: 'perso', label: 'Mes mots', emoji: '✍️', desc: 'Vos propres paires' },
 ];
 
@@ -39,11 +38,6 @@ export function defaultSettings(): GameSettings {
 
 /** Composition propre au mode choisi. */
 export function compositionForMode(mode: GameMode, n: number) {
-  if (mode === 'chaos') {
-    const total = maxImpostors(n);
-    const mrWhite = n >= 9 ? 2 : n >= 5 ? 1 : 0;
-    return { undercover: Math.max(1, total - mrWhite), mrWhite: total - Math.max(1, total - mrWhite) };
-  }
   const c = recommendComposition(n, mode !== 'sans-mrwhite');
   return { undercover: c.undercover, mrWhite: c.mrWhite };
 }
@@ -73,6 +67,8 @@ export function loadSettings(): GameSettings {
   const base = defaultSettings();
   if (!saved) return base;
   const merged: GameSettings = { ...base, ...saved, options: { ...base.options, ...(saved.options ?? {}) } };
+  // Mode retiré ou inconnu (ex. ancien « chaos ») → retour au classique.
+  if (!MODES.some((m) => m.id === merged.mode)) merged.mode = 'classique';
   // Sécurité : on reprend une configuration toujours valide.
   const n = Math.min(MAX_PLAYERS, Math.max(MIN_PLAYERS, merged.playerNames.length));
   merged.playerNames = merged.playerNames.slice(0, n);

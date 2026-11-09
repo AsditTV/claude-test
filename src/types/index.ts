@@ -28,7 +28,7 @@ export interface WordBank {
   categories: WordCategory[];
 }
 
-export type GameMode = 'classique' | 'rapide' | 'sans-mrwhite' | 'chaos' | 'perso';
+export type GameMode = 'classique' | 'rapide' | 'sans-mrwhite' | 'perso';
 
 export interface GameOptions {
   /** Les joueurs votent un par un sur le téléphone. Sinon : élimination à main levée. */
