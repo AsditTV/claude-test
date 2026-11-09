@@ -383,7 +383,6 @@ export function SetupPage() {
             <Toggle checked={s.options.votesEnabled} onChange={(v) => setOption('votesEnabled', v)} label="Votes secrets" desc="Chacun vote à son tour sur le téléphone. Sinon : vote à main levée." />
             <Toggle checked={s.options.randomOrder} onChange={(v) => setOption('randomOrder', v)} label="Ordre de passage aléatoire" desc="Nouvel ordre de parole à chaque manche" />
             <Toggle checked={s.options.cluesEnabled} onChange={(v) => setOption('cluesEnabled', v)} label="Indice pour Mr White" desc="Mr White découvre la catégorie du mot" />
-            <Toggle checked={s.options.hiddenRoles} onChange={(v) => setOption('hiddenRoles', v)} label="Rôles cachés (variante officielle)" desc="Civils et Undercover voient seulement leur mot, sans savoir leur camp" />
             <Toggle checked={s.options.showRules} onChange={(v) => setOption('showRules', v)} label="Afficher les règles" desc="Avant la première manche" />
             <div className="rounded-2xl bg-white/[0.04] px-4 py-3">
               <div className="mb-2 flex items-center gap-2 font-medium text-slate-100">

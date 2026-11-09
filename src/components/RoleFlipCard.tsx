@@ -76,7 +76,7 @@ function CardFace({ card }: { card: RoleCard }) {
                 {card.word}
               </p>
               {card.displayedRole === 'agent' && (
-                <p className="mt-2 text-xs text-slate-500">Civil ou Undercover ? À toi de le découvrir…</p>
+                <p className="mt-2 text-sm text-slate-400">Civil ou Undercover ? Écoute les autres pour le découvrir…</p>
               )}
             </>
           ) : (

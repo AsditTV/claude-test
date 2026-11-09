@@ -25,7 +25,7 @@ export function RulesContent({ compact }: { compact?: boolean }) {
           icon={<VenetianMask size={20} />}
           color="text-rose-300 bg-rose-500/10"
           title="Undercover"
-          text="A un mot proche mais différent. Se fond dans la masse."
+          text="A un mot proche mais différent, sans le savoir. Personne ne sait s’il est Civil ou Undercover."
         />
         <RoleLine
           icon={<HelpCircle size={20} />}

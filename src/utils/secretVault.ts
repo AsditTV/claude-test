@@ -58,7 +58,9 @@ export function getRoleCard(playerId: string, options: GameOptions): RoleCard {
   const s = must();
   const role = s.roles[playerId];
   const word = role === 'civil' ? s.civilWord : role === 'undercover' ? s.undercoverWord : null;
-  const displayedRole = options.hiddenRoles && role !== 'mrwhite' ? 'agent' : role;
+  // Règle du jeu : un joueur ne sait jamais s'il est Civil ou Undercover.
+  // Seul Mr White se sait Mr White (il n'a pas de mot).
+  const displayedRole = role === 'mrwhite' ? 'mrwhite' : 'agent';
   const hint = role === 'mrwhite' && options.cluesEnabled ? s.categoryName : null;
   return { role, displayedRole, word, hint };
 }

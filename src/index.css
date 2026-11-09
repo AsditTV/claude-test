@@ -107,6 +107,67 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Couleurs de secours HORS @layer, en rgba() simple.
+   Certains Safari/WebViews d'iPhone gèrent mal les couleurs
+   translucides de Tailwind 4 (color-mix, @layer) : sans ces règles,
+   champs et boutons pouvaient apparaître blancs et illisibles.
+   ───────────────────────────────────────────────────────────── */
+.bg-white\/5{background-color:rgba(255,255,255,0.05)}
+.bg-white\/10{background-color:rgba(255,255,255,0.1)}
+.bg-white\/\[0\.04\]{background-color:rgba(255,255,255,0.04)}
+.bg-white\/\[0\.03\]{background-color:rgba(255,255,255,0.03)}
+.bg-white\/\[0\.08\]{background-color:rgba(255,255,255,0.08)}
+.bg-white\/\[0\.07\]{background-color:rgba(255,255,255,0.07)}
+.bg-white\/\[0\.05\]{background-color:rgba(255,255,255,0.05)}
+.bg-white\/25{background-color:rgba(255,255,255,0.25)}
+.bg-black\/70{background-color:rgba(0,0,0,0.7)}
+.bg-black\/25{background-color:rgba(0,0,0,0.25)}
+.border-white\/10{border-color:rgba(255,255,255,0.1)}
+.border-white\/15{border-color:rgba(255,255,255,0.15)}
+.border-white\/5{border-color:rgba(255,255,255,0.05)}
+.border-white\/25{border-color:rgba(255,255,255,0.25)}
+.border-white\/20{border-color:rgba(255,255,255,0.2)}
+.text-white\/80{color:rgba(255,255,255,0.8)}
+.text-white\/85{color:rgba(255,255,255,0.85)}
+.text-black\/60{color:rgba(0,0,0,0.6)}
+.hover\:bg-white\/10:hover{background-color:rgba(255,255,255,0.1)}
+.hover\:bg-white\/5:hover{background-color:rgba(255,255,255,0.05)}
+.hover\:bg-white\/\[0\.07\]:hover{background-color:rgba(255,255,255,0.07)}
+
+/* Champs de saisie et boutons de réglage : couleurs pleines, contraste garanti. */
+.input {
+  background-color: #17173d;
+  color: #f1f5f9;
+  -webkit-text-fill-color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 1;
+}
+.input::placeholder {
+  color: #8088a6;
+  -webkit-text-fill-color: #8088a6;
+  opacity: 1;
+}
+.input:focus {
+  background-color: #1e1e4c;
+  border-color: rgba(167, 139, 250, 0.75);
+}
+.ctl {
+  background-color: #26265a;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ctl:hover {
+  background-color: #303070;
+}
+.ctl:disabled {
+  opacity: 0.35;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

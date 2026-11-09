@@ -8,7 +8,6 @@ export const DEFAULT_OPTIONS: GameOptions = {
   cluesEnabled: false,
   randomOrder: true,
   speakingTimer: 0,
-  hiddenRoles: false,
   showRules: true,
 };
 

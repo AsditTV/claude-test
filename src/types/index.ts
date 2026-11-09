@@ -39,8 +39,6 @@ export interface GameOptions {
   randomOrder: boolean;
   /** Secondes par indice (0 = pas de chrono). */
   speakingTimer: number;
-  /** Variante officielle : civils et undercover voient seulement leur mot, pas leur rôle. */
-  hiddenRoles: boolean;
   /** Afficher l'écran des règles avant la première manche. */
   showRules: boolean;
 }

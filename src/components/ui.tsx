@@ -188,7 +188,7 @@ export function Stepper({ value, min, max, onChange, label, sub, accent = 'text-
           aria-label={`Moins de ${label}`}
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
-          className="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-slate-200 transition hover:bg-white/10 disabled:opacity-30"
+          className="ctl grid h-10 w-10 place-items-center rounded-xl transition"
         >
           <Minus size={18} />
         </button>
@@ -206,7 +206,7 @@ export function Stepper({ value, min, max, onChange, label, sub, accent = 'text-
           aria-label={`Plus de ${label}`}
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
-          className="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-slate-200 transition hover:bg-white/10 disabled:opacity-30"
+          className="ctl grid h-10 w-10 place-items-center rounded-xl transition"
         >
           <Plus size={18} />
         </button>
@@ -284,8 +284,9 @@ export function Modal({
         <motion.div
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-6"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          animate={{ opacity: 1, pointerEvents: 'auto' }}
+          // Pendant la fermeture, la fenêtre ne doit plus capter les appuis.
+          exit={{ opacity: 0, pointerEvents: 'none' }}
           onClick={onClose}
         >
           <motion.div

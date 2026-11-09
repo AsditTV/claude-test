@@ -7,6 +7,14 @@ const URL = process.argv[2] || 'http://localhost:5173/';
 const SHOTS = process.argv[3] || null;
 const NAMES = ['Asdit', 'Lucas', 'Emma', 'Noah', 'Léa'];
 
+/** Mot majoritaire = civils, l'autre = undercover. */
+function resolveCamps(roles, words) {
+  const count = {};
+  for (const w of Object.values(words)) if (w) count[w] = (count[w] || 0) + 1;
+  const civil = Object.keys(count).sort((a, b) => count[b] - count[a])[0];
+  for (const n of Object.keys(roles)) if (roles[n] === 'AGENT') roles[n] = words[n] === civil ? 'CIVIL' : 'UNDERCOVER';
+}
+
 function assert(cond, msg) {
   if (!cond) throw new Error('ÉCHEC : ' + msg);
   console.log('  ✓ ' + msg);
@@ -16,6 +24,7 @@ function assert(cond, msg) {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ ...devices['iPhone 13'] });
   const page = await ctx.newPage();
+  global.__page = page;
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -84,6 +93,9 @@ function assert(cond, msg) {
       await tid('next-player').click();
     }
   }
+  // Les cartes n'affichent jamais CIVIL/UNDERCOVER : on déduit les camps des mots.
+  assert(Object.values(roles).every((r) => r === 'AGENT' || r === 'MR WHITE'), 'Aucune carte n’indique Civil ou Undercover');
+  resolveCamps(roles, words);
   const values = Object.values(roles);
   assert(values.filter((r) => r === 'UNDERCOVER').length === 1, '1 Undercover attribué');
   assert(values.filter((r) => r === 'MR WHITE').length === 1, '1 Mr White attribué');
@@ -126,13 +138,17 @@ function assert(cond, msg) {
       await page.waitForTimeout(350);
     }
   };
-  let count = 0;
+  // Répartition visant une égalité 2-2-1 : Undercover ×2, civils[0] ×2, un autre ×1.
+  const other = NAMES.find((n) => n !== under && n !== civils[0]);
+  const pool = [under, under, civils[0], civils[0], other];
+  const voted = new Set();
   await castVotes((voter) => {
-    count++;
-    const plan = [under, civils[0]];
-    let t = plan[count % 2];
-    if (count === 5) t = NAMES.find((n) => n !== voter && n !== under && n !== civils[0]);
-    if (t === voter) t = plan[(count + 1) % 2];
+    voted.add(voter);
+    const ok = pool.map((t, i) => [t, i]).filter(([t]) => t !== voter);
+    // On consomme d'abord les cibles qui n'ont pas encore voté (elles ne pourront pas voter pour elles-mêmes).
+    ok.sort(([a], [b]) => (voted.has(a) ? 1 : 0) - (voted.has(b) ? 1 : 0));
+    const [t, i] = ok[0];
+    pool.splice(i, 1);
     return t;
   });
   await tid('revote').waitFor({ timeout: 5000 }).catch(() => {});
@@ -195,6 +211,7 @@ function assert(cond, msg) {
     await tid('done-role').click();
     if (i < NAMES.length - 1) await tid('next-player').click();
   }
+  resolveCamps(roles2, words2);
   const white2 = NAMES.find((n) => roles2[n] === 'MR WHITE');
   const civil2 = words2[NAMES.find((n) => roles2[n] === 'CIVIL')];
   await tid('start-game').click();
@@ -223,5 +240,10 @@ function assert(cond, msg) {
   console.log('\nTous les tests de bout en bout sont passés ✔');
 })().catch(async (e) => {
   console.error(e);
+  if (global.__page) {
+    const txt = await global.__page.locator('body').innerText().catch(() => '');
+    console.error('--- ÉCRAN AU MOMENT DE L’ÉCHEC ---\n' + txt.slice(0, 600));
+    if (SHOTS) await global.__page.screenshot({ path: `${SHOTS}/failure.png` }).catch(() => {});
+  }
   process.exit(1);
 });
