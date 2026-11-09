@@ -185,6 +185,7 @@ function assert(cond, msg) {
   assert((await tid('guess-result').textContent()).includes('Raté'), 'Mauvaise devinette refusée');
   const body = await page.locator('body').innerText();
   assert(!body.includes(civilWord), 'Le mot des civils n’est pas dévoilé après un échec');
+  await page.waitForTimeout(700); // un humain ne tape pas en moins de 0,45 s (anti double-appui)
   await tid('guess-continue').click();
 
   await tid('winner-title').waitFor();
@@ -227,6 +228,7 @@ function assert(cond, msg) {
   await tid('guess-submit').click();
   await page.getByRole('button', { name: 'Valider', exact: true }).click();
   assert((await tid('guess-result').textContent()).includes('Bien joué'), `Mr White trouve « ${civil2} »`);
+  await page.waitForTimeout(700); // un humain ne tape pas en moins de 0,45 s (anti double-appui)
   await tid('guess-continue').click();
   await tid('winner-title').waitFor();
   assert((await tid('winner-title').textContent()).includes('Mr White'), 'Victoire de Mr White');
